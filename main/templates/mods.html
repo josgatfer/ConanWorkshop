@@ -1,0 +1,142 @@
+
+
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Mods </h1>
+{% endblock %}
+
+  {% block contenido %}
+			<table class="table table-bordered">
+				<thead class="thead-dark">
+				  <tr>
+					<th></th>
+					<th>Título</th>
+					<th>Fecha de Actualización</th>
+					<th>Etiquetas</th>
+					<th>Suscriptores</th>
+					<th>Puntuación</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for mod in mods %}
+					<tr>
+						<td width="5%">
+							<img src="{{ mod.imagen }}" class="img_center"  height="40%" alt="Icono del mod">
+						</td>
+					  <td width="15%">
+						  <a href="mod/{{ mod.id }}">{{ mod.titulo }}</a>
+						</td>
+					  <td width="15%">
+						{% if mod.fechaActualizacion != Null %}  
+						{{ mod.fechaActualizacion }}
+						{% else %}
+						{{ mod.fechaPublicacion }}
+						{% endif %}
+					  </td>
+					  <td width="15%">
+					{% if mod.etiquetas.count != 0 %}
+					{% for et in mod.etiquetas.all %}
+						{{et.nombre}} 
+					{% endfor %}
+					{% else %}
+						Este Mod no ha sido etiquetado
+					{% endif %}
+					</td>
+					  <td width="15%">{{ mod.suscriptores}}</td>
+					<td width="15%">
+						{% if mod.puntuacion != Null %}
+						{{ mod.puntuacion }} en {{ mod.numeroValoraciones }} valoraciones
+						{% else %}
+						No hay suficientes valoraciones para este mod
+						{% endif %}
+					</td>
+					</tr>
+				  {% endfor %}
+				</tbody>
+			  </table>
+			  
+			  {% if mods.paginator.num_pages < 10 %}
+			  
+				<ul class="pagination">
+				  {% if mods.has_previous %}
+					<li class="list-group-item"><a href="?page={{ mods.previous_page_number }}">&laquo;</a></li> 
+				  {% else %}
+					<li class="disabled list-group-item"><span>&laquo;</span></li>
+				  {% endif %}
+				  {% for i in mods.paginator.page_range %}
+					{% if mods.number == i %}
+					  <li class="active list-group-item"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+					{% else %}
+					  <li class="list-group-item"><a href="?page={{ i }}">{{ i }}</a></li>
+					{% endif %}
+				  {% endfor %}
+
+				  {% if mods.has_next %}
+					<li class="list-group-item"><a href="?page={{ mods.next_page_number }}">&raquo;</a></li>
+				  {% else %}
+					<li class="list-group-item disabled"><span>&raquo;</span></li>
+				  {% endif %}
+				</ul>
+			  {% else %}
+				<ul class="pagination">
+					{% if mods.has_previous %}
+					<li class="list-group-item"><a href="?page={{ mods.previous_page_number }}">&laquo;</a></li> 
+					{% else %}
+					<li class="disabled list-group-item"><span>&laquo;</span></li>
+					{% endif %}
+
+					{% if mods.number == 1 %}
+					<li class="active list-group-item"><span>{{ 1 }} <span class="sr-only">(current)</span></span></li>
+					<li class="list-group-item"><a href="?page=2">2</a></li>
+					<li class="list-group-item">...</li>
+					<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages }}">{{ mods.paginator.num_pages }}</a></li>
+					
+					{% elif mods.number == 2 %}
+					<li class="list-group-item"><a href="?page=1">1</a></li>
+					<li class="active list-group-item"><span>{{ 2 }} <span class="sr-only">(current)</span></span></li>
+					<li class="list-group-item"><a href="?page=3">3</a></li>
+					<li class="list-group-item">...</li>
+					<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages }}">{{ mods.paginator.num_pages }}</a></li>
+					{% elif mods.number >= 3 and mods.number <= mods.paginator.num_pages|add:"-2" %}
+					<li class="list-group-item"><a href="?page=1">1</a></li>
+						{% if mods.previous_page_number == 2 %}
+						<li class="list-group-item"><a href="?page=2">2</a></li>
+						{% else %}
+						<li class="list-group-item">...</li>
+						<li class="list-group-item"><a href="?page={{ mods.previous_page_number }}">{{ mods.previous_page_number }}</a></li>
+						
+						{% endif %}
+					<li class="active list-group-item"><span>{{ mods.number }} <span class="sr-only">(current)</span></span></li>
+						{% if mods.next_page_number == mods.paginator.num_pages|add:"-1" %}
+						<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages|add:"-1" }}">{{ mods.paginator.num_pages|add:"-1" }}</a></li>
+						<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages }}">{{ mods.paginator.num_pages }}</a></li>
+						{% else %}
+						<li class="list-group-item"><a href="?page={{ mods.next_page_number }}">{{ mods.next_page_number }}</a></li>
+						<li class="list-group-item">...</li>
+						<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages }}">{{ mods.paginator.num_pages }}</a></li>
+						
+						{% endif %}
+
+					{% elif mods.number == mods.paginator.num_pages|add:"-1" %}
+					
+					<li class="list-group-item"><a href="?page=1">1</a></li>
+					<li class="list-group-item">...</li>
+					<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages|add:"-2" }}">{{ mods.paginator.num_pages|add:"-2" }}</a></li>
+					<li class="active list-group-item"><span>{{ mods.number }} <span class="sr-only">(current)</span></span></li>
+					<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages }}">{{ mods.paginator.num_pages }}</a></li>
+					
+					{% elif mods.number == mods.paginator.num_pages %}
+					<li class="list-group-item"><a href="?page=1">1</a></li>
+					<li class="list-group-item">...</li>
+					<li class="list-group-item"><a href="?page={{ mods.paginator.num_pages|add:"-1" }}">{{ mods.paginator.num_pages|add:"-1" }}</a></li>
+					<li class="active list-group-item"><span>{{ mods.number }} <span class="sr-only">(current)</span></span></li>
+					{% endif %}
+					{% if mods.has_next %}
+					<li class="list-group-item"><a href="?page={{ mods.next_page_number }}">&raquo;</a></li>
+					{% else %}
+					<li class="disabled list-group-item"><span>&raquo;</span></li>
+					{% endif %}
+				</ul>
+			  {% endif %}
+  {% endblock %}

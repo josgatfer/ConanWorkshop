@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Bienvenido </h1>
+{% endblock %}
+
+{% block contenido %}
+<h2>Área para administradores</h2>
+
+<p>
+    Bienvenido <b>{{request.user.username}}</b>, 
+    esta página es exclusiva de administradores
+</p>
+
+<hr />
+<a href="/users/logout">Cerrar sesión</a>
+{% endblock %}

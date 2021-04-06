@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Login </h1>
+{% endblock %}
+
+{% block contenido %}
+<h2>Iniciar sesión</h2>
+
+<form method="POST">
+    {{ formulario.as_p }}
+    {% csrf_token %}
+    <button class="btn btn-dark" type="submit">Login</button>
+</form>
+
+<hr />
+{% endblock %}

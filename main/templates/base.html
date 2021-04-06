@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8'>
+  <style>
+   {% block style_css %}{% endblock %}
+   .img_center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100 %;
+}
+  </style>
+  {# Cargamos la librería #}
+  {% load bootstrap4 %}
+  {% bootstrap_javascript jquery='full' %}
+
+  {# CSS Bootstrap #}
+  {% bootstrap_css %}
+</head>
+<body style="background: linear-gradient(to bottom, 	dimgrey, white) no-repeat fixed;">
+  <header> 
+  	{% block encabezado %}{% endblock %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/">ConanWorkshop</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item ">
+            <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="/mods">Mods</a>
+          </li>
+          
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Búsquedas
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/buscarmodsportitulodescripcion">Por Título o Descripción</a>
+              <a class="dropdown-item" href="/buscarmodsporfecha">Posterior a Fecha</a>
+              <a class="dropdown-item" href="/buscarmodsporetiqueta">Por Etiqueta</a>
+              <a class="dropdown-item" href="/buscarmodsportitulodescripcionfecha">Por Título o Descripción en un rango de Fechas</a>
+            </div>
+          </li>
+          {% if request.user.is_staff or es_admin %}
+          <li class="nav-item ">
+            <a class="nav-link" href="/carga">Carga</a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="/users/logout">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item ">
+            <a class="nav-link" href="/users/login">Login</a>
+          </li>
+          {% endif %}          
+        </ul>
+      </div>
+    </nav>
+	<hr>
+  </header>
+  <section>
+    {% block contenido %}{% endblock %}
+  </section>
+  {% block pie %}{% endblock %} 
+</body>
+</html>

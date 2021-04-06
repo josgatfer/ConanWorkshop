@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block style_css %}
+{% endblock %}
+
+{% block encabezado %}
+<h1> Detalles del Mod: {{mod.titulo|upper}}</h1>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="card bg-secondary text-white mb-3" style="width:90%; margin-left: auto; margin-right:auto;">
+    <h5 class="card-header">{{ mod.titulo }}</h5>
+
+    <div class="row g-0">
+      <div class="col-md-2">
+        <img class="img_center" style="margin-top:10%" src="{{ mod.imagen }}" alt="Imagen del mod">
+      </div>
+      <div class="col-md-10">
+        <div class="card-body">
+          <p class="card-text">{{ mod.descripcion | safe }}</p>
+          <p class="card-text"><h5>Etiquetas:</h5> <small class="text-muted-white"> 
+            {% if mod.etiquetas.count != 0 %}
+            {% for et in mod.etiquetas.all %}
+                {{et.nombre}}  
+            {% endfor %}
+            {% else %}
+                Este Mod no ha sido etiquetado
+            {% endif %}
+            </small></p>
+            <b class="card-text">Tamaño:  <small class="text-muted-white"> 
+              {{ mod.tamanyo }} MB
+              </small></b>
+          <p class="card-text"><small class="text-muted-white">Actualizado por última vez el 
+            {% if mod.fechaActualizacion != Null %}  
+            {{ mod.fechaActualizacion }}
+            {% else %}
+            {{ mod.fechaPublicacion }}
+            {% endif %}</small></p>
+            <b class="card-text">Más mods del creador de este mod:  <small class="text-muted-white"> 
+              <a href="{{ mod.linkCreador }}">{{ mod.linkCreador }}</a>
+              </small></b>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

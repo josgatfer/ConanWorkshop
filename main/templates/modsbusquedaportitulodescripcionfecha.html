@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block encabezado %}
+<h1> Búsqueda de Mods por Título o Descripción en un rango de Fechas </h1>
+{% endblock %}
+
+{% block contenido %}
+
+
+    	<form id="formulario" method="post" action=''>{% csrf_token %}
+    		{{formulario}}
+    		<input class="btn btn-dark" type='submit' value='Realizar Búsqueda'/>
+    	</form>
+	    
+	    <hr>
+
+	    {% if mods %}
+		    <h3> Total de Mods con la búsqueda realizada que han sido publicados o actualizados entre las fechas especificadas:  {{ mods|length }}</h3>
+
+			<div class="card-deck"></div>
+		{% for mod in mods %}
+		{% with i=counter %}
+		<div class="card bg-secondary text-white mb-3" >
+			<h5 class="card-header">{{ mod.titulo }}</h5>
+			
+			<div class="row g-0">
+			  <div class="col-md-1.75">
+				<img class="" src="{{ mod.imagen }}" alt="Imagen del mod">
+			  </div>
+			  <div >
+				  <div class="col-md-24">
+				<div class="card-body">
+					<a class="btn btn-dark" data-toggle="collapse" href="#descripcion{{ i }}" role="button" aria-expanded="false" aria-controls="descripcion{{ i }}">
+						Haga click para mostrar/esconder la descripción
+					  </a>
+					<div id = "descripcion{{ i }}" class="card-text collapse ">{{ mod.descripcion | safe }}</div>
+				  <p class="card-text"><b>Etiquetas: </b><small class="text-muted-white"> 
+					{% if mod.etiquetas %}
+					{{mod.etiquetas}}
+					{% else %}
+						Este Mod no ha sido etiquetado
+					{% endif %}
+					</small></p>
+					<b class="card-text">Número de suscriptores:  <small class="text-muted-white"> 
+						{{ mod.suscriptores }}
+						</small></b>
+					<b class="card-text">Tamaño:  <small class="text-muted-white"> 
+						{{ mod.tamanyo }} MB
+						</small></b>
+				  <p class="card-text"><small class="text-muted-white">Actualizado por última vez el 
+					{% if mod.fecha_actualizacion != Null %}  
+					{{ mod.fecha_actualizacion }}
+					{% else %}
+					{{ mod.fecha_publicacion }}
+					{% endif %}
+					</small></p>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+			{% endwith %}
+		{% endfor %}
+		</div>
+			 
+		{% endif %}
+	</div>
+{% endblock %}
